@@ -207,8 +207,8 @@ def processPicture(cameraID, messageID, CameraChunkList):
             try:
     
                 con = mdb.connect(
-                    "localhost",
-                    "root",
+                    "homeassistant.lan",
+                    "skyweather2",
                     config.MySQL_Password,
                     "WeatherSenseWireless" 
                 )

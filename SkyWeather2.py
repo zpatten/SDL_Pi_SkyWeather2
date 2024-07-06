@@ -86,8 +86,8 @@ if (config.enable_MySQL_Logging):
     try:
 
         con = mdb.connect(
-          "localhost",
-          "root",
+          "homeassistant.lan",
+          "skyweather2",
           config.MySQL_Password,
           "SkyWeather2"
           )
@@ -96,7 +96,7 @@ if (config.enable_MySQL_Logging):
         print("--------")
         print("MySQL Database SkyWeather2 Not Installed.")
         print("Run this command:")
-        print("sudo mysql -u root -p < SkyWeather2.sql")
+        print("sudo mysql -u skyweather2 -p < SkyWeather2.sql")
         print("SkyWeather2 Stopped")
         print("--------")
         sys.exit("SkyWeather2 Requirements Error Exit")
@@ -107,8 +107,8 @@ if (config.enable_MySQL_Logging):
     try:
 
         con = mdb.connect(
-          "localhost",
-          "root",
+          "homeassistant.lan",
+          "skyweather2",
           config.MySQL_Password,
           "WeatherSenseWireless"
           )
@@ -117,7 +117,7 @@ if (config.enable_MySQL_Logging):
         print("--------")
         print("MySQL Database WeatherSenseWireless Not Installed.")
         print("Run this command:")
-        print("sudo mysql -u root -p < WeatherSenseWireless.sql")
+        print("sudo mysql -u skyweather2 -p < WeatherSenseWireless.sql")
         print("SkyWeather2 Stopped")
         print("--------")
         sys.exit("SkyWeather2 Requirements Error Exit")
@@ -126,8 +126,8 @@ if (config.enable_MySQL_Logging):
     try:
 
         con = mdb.connect(
-          "localhost",
-          "root",
+          "homeassistant.lan",
+          "skyweather2",
           config.MySQL_Password,
           "WeatherSenseWireless"
           )
@@ -139,7 +139,7 @@ if (config.enable_MySQL_Logging):
         print("--------")
         print("MySQL Database WeatherSenseWireless Updates Not Installed.")
         print("Run this command:")
-        print("sudo mysql -u root -p WeatherSenseWireless < updateWeatherSenseWireless.sql")
+        print("sudo mysql -u skyweather2 -p WeatherSenseWireless < updateWeatherSenseWireless.sql")
         print("SkyWeather2 Stopped")
         print("--------")
         sys.exit("SkyWeather2 Requirements Error Exit")
@@ -182,13 +182,14 @@ import DustSensor
 
 try:
 
-        DustSensor.powerOnDustSensor()
-        time.sleep(3)
-        myData = DustSensor.get_data()
-        print ("data=",myData)
-        DustSensor.powerOffDustSensor()
+        #DustSensor.powerOnDustSensor()
+        #time.sleep(3)
+        #DustSensor.read_AQI()
+        #myData = DustSensor.get_data()
+        #print ("data=",myData)
+        #DustSensor.powerOffDustSensor()
 
-        config.DustSensor_Present = True
+        config.DustSensor_Present = False
 
 except:
         print(traceback.format_exc())
@@ -261,6 +262,7 @@ print(util.returnStatusEnable("UseWSAQI",config.USEWSAQI))
 print(util.returnStatusEnable("UseWSSKYCAM",config.USEWSSKYCAM))
 print(util.returnStatusEnable("UseMySQL",config.enable_MySQL_Logging))
 print(util.returnStatusEnable("UseMQTT",config.MQTT_Enable))
+print(util.returnStatusEnable("UseMQTTAuth",config.MQTT_Authentication))
 print(util.returnStatusLine("Check WLAN",config.enable_WLAN_Detection))
 print(util.returnStatusLine("WeatherUnderground",config.WeatherUnderground_Present))
 print(util.returnStatusLine("UseWeatherStem",config.USEWEATHERSTEM))
@@ -303,11 +305,24 @@ import paho.mqtt.client as mqtt
 
 
 # set up MQTT
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+
+def on_publish(client, userdata, mid):
+    print("MQTT: on_publish("+str(client)+", "+str(userdata)+", "+str(mid)+")")
+
+def on_log(client, userdata, level, buf):
+    print("MQTT: "+str(buf))
+
 if (config.MQTT_Enable):
     state.mqtt_client = mqtt.Client(client_id="SkyWeather2") 
-    if (config.MQTT_Authentication):
+    state.mqtt_client.on_log = on_log
+    state.mqtt_client.on_connect = on_connect
+    state.mqtt_client.on_publish = on_publish
+    if (config.MQTT_Authentication == True):
         state.mqtt_client.username_pw_set(config.MQTT_Username, config.MQTT_Password)
     state.mqtt_client.connect(config.MQTT_Server_URL, port=config.MQTT_Port_Number)
+    state.mqtt_client.loop_start()
 
 import publishMQTT
 
@@ -347,7 +362,7 @@ scheduler.add_job(watchDog.patTheDog, 'interval', seconds=20)   # reset the Watc
 
 
 # every 5 days at 00:04, reboot
-scheduler.add_job(rebootPi, 'cron', day='5-30/5', hour=0, minute=4, args=["5 day Reboot"]) 
+#scheduler.add_job(rebootPi, 'cron', day='5-30/5', hour=0, minute=4, args=["5 day Reboot"]) 
 	
 #check for Barometric Trend (every 15 minutes)
 scheduler.add_job(util.barometricTrend, 'interval', seconds=15*60)

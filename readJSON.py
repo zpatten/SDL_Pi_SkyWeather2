@@ -39,7 +39,10 @@ def setDefaults():
         config.Camera_Rotation =  0
         config.REST_Enable = False 
         config.MQTT_Enable = False 
-        config.MQTT_Server_URL = "localhost" 
+        config.MQTT_Authentication = False 
+        config.MQTT_Username = "username"
+        config.MQTT_Password = "password"
+        config.MQTT_Server_URL = "homeassistant.lan" 
         config.MQTT_Port_Number = 1883 
         config.MQTT_Send_Seconds = 500 
         config.English_Metric = False 
@@ -102,6 +105,9 @@ def readJSON(addPath):
                 config.Camera_Rotation = getJSONValue('Camera_Rotation')
                 config.REST_Enable = getJSONValue('REST_Enable')
                 config.MQTT_Enable = getJSONValue('MQTT_Enable')
+                config.MQTT_Authentication = getJSONValue('MQTT_Authentication')
+                config.MQTT_Username = getJSONValue('MQTT_Username')
+                config.MQTT_Password = getJSONValue('MQTT_Password')
                 config.MQTT_Server_URL = getJSONValue('MQTT_Server_URL')
                 config.MQTT_Port_Number = int(getJSONValue('MQTT_Port_Number'))
                 config.MQTT_Send_Seconds = int(getJSONValue('MQTT_Send_Seconds'))

@@ -264,7 +264,7 @@ class SkyWeatherConfigure(App):
         self.Camera_Rotation =  0
         self.REST_Enable = False 
         self.MQTT_Enable = False 
-        self.MQTT_Server_URL = "localhost" 
+        self.MQTT_Server_URL = "homeassistant.lan" 
         self.MQTT_Port_Number = 1883 
         self.MQTT_Send_Seconds = 500 
         self.MQTT_Authentication = False
@@ -1217,7 +1217,7 @@ class SkyWeatherConfigure(App):
 
 
 
-        # returning the root widget
+        # returning the skyweather2 widget
         
         return self.mainContainer
 

@@ -61,7 +61,7 @@ def generateTHData(timeDelta):
 
         try:
                 #print("trying database")
-                con = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather2');
+                con = mdb.connect('homeassistant.lan', 'skyweather2', config.MySQL_Password, 'SkyWeather2');
                 cur = con.cursor()
                 now = datetime.datetime.now()
                 before = now - timeDelta

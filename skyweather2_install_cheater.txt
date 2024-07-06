@@ -1,0 +1,125 @@
+-------------------------------------------------------------------------------
+skyweather2_install_cheater.txt
+
+Version 1.0
+2021-03-20
+Written by Sopwith.
+http://www.ismellsmoke.net
+sopwith@ismellsmoke.net
+
+This is the condensed version of the SkyWeather2 installation guide.
+It was written for experience Makers or those of you who often say TL;DR.
+
+-------------------------------------------------------------------------------
+Quick Steps to get your SkyWeather2 working.
+-------------------------------------------------------------------------------
+1) Install 3 AA batteries in the WeatherRack2 sensor array.
+2) Configure DIP switches on indoor temp Sensor.
+3) Install 2-AAA batteries in indoor temp Sensor.
+4) Install SkyWeather2 hat on Pi GPIO pins.
+5) Connect SDR receiver to USB port on Pi.
+6) Connect antenna to SDR receiver.
+7) Connect a camera to the Pi. (Does not have to be SkyWeather camera).
+8) Connect AirQualitySensor to SkyWeather2 hat if purchased.
+9) Create a Pi OS SDCard (https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit)
+10) Boot Pi.
+11) Configure Pi.
+    - $ sudo raspi-config
+        • Interface Options – P1 Pi Camera (Enable)
+        • Interface Options – P2 SSH (Enable)
+        • Interface Options – P5 I2C (Enable)
+        • Localisation Options – L1 Locale (Select correct locale)
+        • Localisation Options – L2 Timezone (Select correct timezone)
+        • Localisation Options – L3 Keyboard (Select keyboard)
+12) Reboot Pi.
+    - $ sudo reboot
+13) Update Pi OS.
+    - $ sudo apt update
+    - $ sudo apt upgrade -y
+14) Reboot Pi.
+    - $ sudo reboot
+15) Copy skyweather2_install.zip to Pi.
+    - $ scp skyweather2_install.zip pi@pi_ip_here:~/
+    or
+    - Put skyweather2_install.zip on thumb drive and connect to Pi.
+    or
+    - Use WinSCP on Windows host to copy file to Pi.
+16) Unzip skyweather2_install.zip.
+    - $ cd
+    - $ unzip skyweather2_install.zip
+17) Run install script
+    - $ chmod +x skyweather2_install.sh
+    - $ sudo ./skyweather2_install.sh
+18) Drink coffee for 15 minutes.
+19) Secure MySQL.
+    - $ sudo mysql_secure_installion
+    - $ <Enter>
+    - $ Y
+    - $ New password: password
+    - $ Re-enter password: password
+    - $ <Enter>
+    - $ <Enter>
+    - $ <Enter>
+    - $ <Enter>
+20) Create MySQL database.
+    - $ cd
+    - $ cd SDL_Pi_Skyweather2
+    - $ sudo mysql -u root -p < SkyWeather2.sql
+    - $ Enter: password
+    - $ sudo mysql -u root -p < WeatherSenseWireless.sql
+    - $ Enter: password
+    - $ sudo mysql -u root -p WeatherSenseWireless < updateWeatherSenseWireless.sql
+    - $ Enter: password
+21) Test MySQL database.
+    - $ sudo mysql
+    - > show databases;
+    - Make sure you see SkyWeather2 and WeatherSenseWireless in list.
+    - > <Ctrl> c
+22) Test BMP280 sensor.
+    - $ cd
+    - $ cd SDL_Pi_Skyweather2
+    - $ sudo python3 testBMP280.py
+    - Should see Temp, pressure altitude, etc.
+23) Test Camera.
+    - $ sudo python3 testSkyCamera.py
+    Should see 'taking SkyPicture' and 'sending SkyCamera'.
+24) Test rtl-sdr.
+    - $ cd
+    - $ cd rtl-sdr/build/src
+    - $ sudo ./rtl_test
+    - Should see device informaton.
+    - <Ctrl> c
+25) Test rtl_433.
+    - $ cd
+    - $ cd rtl_433/build/src
+    - $ sudo ./rtl_433
+    - Should see lots of text. Sensor data should appear periodically.
+    - <Ctrl> c
+26) Test SkyWeather software.
+    - $ cd
+    - $ cd SDL_Pi_Skyweather2
+    - $ sudo python3 testWirelessSensors.py
+    - Should see sensor data in JSON format. (May take a minute to appear).
+27) Run SkyWeather configuration script.
+    - $ sudo python3 SkyWeatherConfigure.py
+    - remi server should start on port 8001.
+    - On another computer, browse to http://pi_ip_here:8001
+    - Check the 'enable MySQL logging'.
+    - Enter SkyWeather2 in edit box below checkbox.
+    - Click 'Save and Exit' button.
+28) Collect sensor data for Dash App display.
+    - $ sudo python3 SkyWeather2.py
+    - Let script run for several hours to collect data.
+    - <Ctrl> c
+29) Visualize sensor data in Dash App.
+    - $ cd
+    - $ cd SDL_Pi_Skyweather2/dash_app
+    - $ sudo pythono3 index.py
+    - Dash App service should start on port 8050.
+    - On another computer, browse to http://pi_ip_here:8050.
+    - See all your data real pretty and all.
+    - <Ctrl> c to kill dash_app service.
+30) Complete configuration of SkyWeather2 system per SDL docs.
+31) Share this project with young people.
+  
+    

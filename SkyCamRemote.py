@@ -37,13 +37,14 @@ from paho.mqtt import publish
 
 def startMQTT():
 
-    broker_address= config.MQTT_Server_URL
     print("creating new MQTT instance")
     client = mqtt.Client("SkyCam") #create new instance
     client.on_message=MTon_message #attach function to callback
     client.on_connect=MTon_connect
     print("connecting to broker")
-    client.connect(broker_address) #connect to broker
+    if (config.MQTT_Authentication == True):
+        client.username_pw_set(config.MQTT_Username, config.MQTT_Password)
+    client.connect(config.MQTT_Server_URL, port=config.MQTT_Port_Number) #connect to broker
     client.on_log=MTon_log 
     client.loop_start()
 
@@ -161,8 +162,8 @@ def processINFOMessage(msg):
                 print("in INFO with SQL")
 
                 con = mdb.connect(
-                    "localhost",
-                    "root",
+                    "homeassistant.lan",
+                    "skyweather2",
                     config.MySQL_Password,
                     "WeatherSenseWireless" 
                 )

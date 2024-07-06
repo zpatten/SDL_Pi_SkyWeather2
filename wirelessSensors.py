@@ -70,7 +70,7 @@ def mqtt_publish_single(message, topic):
       print ("topic=", topic)
       print ("message=", message)
     try:
-      state.mqtt_client.publish(topic, message)
+      state.mqtt_client.publish(str(topic), message, retain=True)
     except:
       traceback.print_exc()
       print('Mosquitto not available')
@@ -149,15 +149,17 @@ def processFT020T(sLine, lastFT020TTimeStamp ):
     state.TotalRain  = round(var["cumulativerain"]/10.0,1)
 
     wLight = var["light"]
-    if (wLight >= 0x1fffa):
-        wLight = wLight | 0x7fff0000
+#    if (wLight >= 0x1fffa):
+#        wLight = wLight | 0x7fff0000
 
     wUVI =var["uv"]
     if (wUVI >= 0xfa):
-        wUVI = wUVI | 0x7f00
+        wUVI = state.SunlightUVIndex * 10.0
+        #wUVI = wUVI | 0x7f00
 
     state.SunlightVisible =  wLight 
     state.SunlightUVIndex  = round(wUVI/10.0, 1 )
+
 
     if (var['batterylow'] == 0):
         state.BatteryOK = "OK"
@@ -261,8 +263,8 @@ def processWeatherSenseTB(sLine):
             myTESTDescription = ""
 
             con = mdb.connect(
-                "localhost",
-                "root",
+                "homeassistant.lan",
+                "skyweather2",
                 config.MySQL_Password,
                 "WeatherSenseWireless"
             )
@@ -323,8 +325,8 @@ def processWeatherSenseAQI(sLine):
             myTESTDescription = ""
 
             con = mdb.connect(
-                "localhost",
-                "root",
+                "homeassistant.lan",
+                "skyweather2",
                 config.MySQL_Password,
                 "WeatherSenseWireless"
             )
@@ -402,8 +404,8 @@ def WSread_AQI():
         # close
         try:
             con = mdb.connect(
-                "localhost",
-                "root",
+                "homeassistant.lan",
+                "skyweather2",
                 config.MySQL_Password,
                 "WeatherSenseWireless"
             )
@@ -453,8 +455,8 @@ def processSolarMAX(sLine):
                 myTESTDescription = ""
 
                 con = mdb.connect(
-                    "localhost",
-                    "root",
+                    "homeassistant.lan",
+                    "skyweather2",
                     config.MySQL_Password,
                     "WeatherSenseWireless"
                 )
@@ -533,8 +535,8 @@ def processWeatherSenseAfterShock(sLine):
             myTESTDescription = ""
 
             con = mdb.connect(
-                    "localhost",
-                    "root",
+                    "homeassistant.lan",
+                    "skyweather2",
                     config.MySQL_Password,
                     "WeatherSenseWireless"
             )

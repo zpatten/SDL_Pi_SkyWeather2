@@ -17,8 +17,8 @@ import config
 
 def build_graphAQI_figure():
     con = mdb.connect(
-        "localhost", 
-        "root",
+        "homeassistant.lan", 
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless" 
     )
@@ -47,8 +47,8 @@ def build_graphAQI_figure():
 
 def build_graph1_figure():
     con = mdb.connect(
-        "localhost", 
-        "root",
+        "homeassistant.lan", 
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless" 
     )
@@ -82,8 +82,8 @@ def build_graph1_figure():
 
 def build_graph2_figure():
     con = mdb.connect(
-        "localhost", 
-        "root",
+        "homeassistant.lan", 
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless" 
 

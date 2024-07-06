@@ -38,7 +38,7 @@ def takeSkyPicture():
     try:
         camera.rotation = config.Camera_Rotation
         
-        camera.resolution = (1920, 1080)
+        camera.resolution = (4056, 3040)
         # Camera warm-up time
         time.sleep(2)
 
@@ -133,8 +133,8 @@ def takeSkyPicture():
             try:
     
                 con = mdb.connect(
-                    "localhost",
-                    "root",
+                    "homeassistant.lan",
+                    "skyweather2",
                     config.MySQL_Password,
                     "WeatherSenseWireless" 
                 )

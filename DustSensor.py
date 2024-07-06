@@ -12,6 +12,8 @@ import time
 import pigpio
 import SDL_Pi_HM3301
 
+import datetime
+
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
@@ -54,47 +56,57 @@ def powerOffDustSensor():
 
 
 def read_AQI():
+  global hm3301
 
+  if (config.SWDEBUG):
+    print ("###############")
+    print ("Reading AQI")
+    print ("###############")
+
+  myData = None
+
+  while not myData:
+    if (config.SWDEBUG):
+      print ("Turning Dust Power On")
+    powerOnDustSensor()
+
+    # delay for 30 seconds for calibrated reading
+    time.sleep(30)
+
+    try:
+      myData = hm3301.get_data()
+    except Exception as e:
+      print('=================================')
+      print(datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
+      print(e)
+      print('=================================')
+      #return 0
       if (config.SWDEBUG):
-          print ("###############")
-          print ("Reading AQI")
-          print ("###############")
-
-      if (config.SWDEBUG):
-          print ("Turning Dust Power On")
-      powerOnDustSensor()
-
-      # delay for 30 seconds for calibrated reading
-      time.sleep(30)
-
-      try:
-              myData = hm3301.get_data()
-      except Exception as e:
-              print('=================================')
-              print(datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
-              print(e)
-              print('=================================')
-              return 0
-      if (config.SWDEBUG):
-        print ("data=",myData)
-      if (hm3301.checksum() != True):
-          if (config.SWDEBUG):
-            print("Checksum Error!")
-          myData = hm3301.get_data()
-          if (hm3301.checksum() != True):
-                if (config.SWDEBUG):
-                    print("2 Checksum Errors!")
-                    return 0
-
-      myAQI = hm3301.get_aqi()
-      if (config.SWDEBUG):
-        hm3301.print_data()
-        print ("AQI=", myAQI)
-
-      if (config.SWDEBUG):
-          print ("Turning Dust Power Off")
+        print ("Turning Dust Power Off")
       powerOffDustSensor()
-      state.AQI = myAQI
+      time.sleep(3)
+      continue
+
+    if (config.SWDEBUG):
+      print ("data=",myData)
+    if (hm3301.checksum() != True):
+      if (config.SWDEBUG):
+        print("Checksum Error!")
+      myData = hm3301.get_data()
+      if (hm3301.checksum() != True):
+        if (config.SWDEBUG):
+          print("2 Checksum Errors!")
+        continue
+
+  myAQI = hm3301.get_aqi()
+  if (config.SWDEBUG):
+    hm3301.print_data()
+    print ("AQI=", myAQI)
+
+  if (config.SWDEBUG):
+    print ("Turning Dust Power Off")
+  powerOffDustSensor()
+  state.AQI = myAQI
 
 
 def old_read_AQI():

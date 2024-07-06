@@ -133,8 +133,8 @@ def buildTimeLapse(source):
             try:
     
                 con = mdb.connect(
-                    "localhost",
-                    "root",
+                    "homeassistant.lan",
+                    "skyweather2",
                     config.MySQL_Password,
                     "WeatherSenseWireless"
                 )
@@ -205,7 +205,7 @@ def buildTimeLapse(source):
             except:
                 pass 
 
-            command ="/usr/bin/ffmpeg -r 20 -i %s -c:v libx264 %s " % (inputFiles, outputFile)
+            command ="/usr/bin/ffmpeg -r 20 -i %s -c:v libx264 -rc-lookahead 6 %s " % (inputFiles, outputFile)
 
             print(command)
             cmd = command.split()

@@ -166,7 +166,7 @@ client = mqtt.Client()
 client.on_log=on_log
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect("localhost", port=1883)
+client.connect("homeassistant.lan", port=1883)
 
 
 # Blocking call that processes network traffic, dispatches callbacks and

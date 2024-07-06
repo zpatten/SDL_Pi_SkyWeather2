@@ -1,0 +1,17 @@
+apscheduler
+dash
+dash_bootstrap_components
+dash-daq
+future
+gpiozero
+i2cdevice
+mysqlclient
+paho-mqtt
+picamera
+pillow
+psutil
+remi
+RPi.GPIO
+smbus
+vcgencmd
+

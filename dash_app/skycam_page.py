@@ -32,8 +32,8 @@ def build_picture_figure(cameraID):
 
 def build_graph1_figure(cameraID):
     con = mdb.connect(
-        "localhost",
-        "root",
+        "homeassistant.lan",
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless"
     )
@@ -66,8 +66,8 @@ def build_graph1_figure(cameraID):
 
 def build_graph2_figure(cameraID):
     con = mdb.connect(
-        "localhost",
-        "root",
+        "homeassistant.lan",
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless"
 
@@ -107,7 +107,7 @@ def getSkyCamList():
     
     newdevices = []
     for device in devices:
-        lastMod= time.ctime(max(os.path.getmtime(root) for root,_,_ in os.walk(dir_path+device)))
+        lastMod= time.ctime(max(os.path.getmtime(skyweather2) for skyweather2,_,_ in os.walk(dir_path+device)))
         lastMod = datetime.datetime.strptime(lastMod, "%a %b %d %H:%M:%S %Y")
         #print ("last modified: %s" % lastMod) 
         if (lastMod > before):

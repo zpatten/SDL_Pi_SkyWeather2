@@ -30,8 +30,8 @@ ASJSON["LastMessageID"]= "N/A"
 def updateAfterShockLines():
 
     con = mdb.connect(
-        "localhost",
-        "root",
+        "homeassistant.lan",
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless"
     )
@@ -122,8 +122,8 @@ def updateAfterShockLines():
 
 def build_graphAfterShock_figure():
     con = mdb.connect(
-        "localhost",
-        "root",
+        "homeassistant.lan",
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless"
     )
@@ -163,8 +163,8 @@ def build_graphAfterShock_figure():
 
 def build_graph1_figure():
     con = mdb.connect(
-        "localhost",
-        "root",
+        "homeassistant.lan",
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless"
     )
@@ -197,8 +197,8 @@ def build_graph1_figure():
 
 def build_graph2_figure():
     con = mdb.connect(
-        "localhost",
-        "root",
+        "homeassistant.lan",
+        "skyweather2",
         config.MySQL_Password,
         "WeatherSenseWireless"
     )
